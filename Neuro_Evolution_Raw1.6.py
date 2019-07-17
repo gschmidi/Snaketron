@@ -2,7 +2,7 @@
 """
 Created on Thu May 23 23:27:57 2019
 
-@author: Gerry
+@author: Gerald Schmidhofer
 """
 #import time
 import numpy as np
