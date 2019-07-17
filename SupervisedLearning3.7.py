@@ -2,7 +2,7 @@
 """
 Created on Wed May  8 09:55:17 2019
 
-@author: Gerry
+@author: Gerald Schmidhofer
 """
 import statistics
 import numpy as np
