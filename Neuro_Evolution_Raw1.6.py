@@ -406,24 +406,25 @@ def video():
 
 "Game Options"
 width=12
-height=10
-vel=0
+height=12
+vel=7
 snake_size=20
 simple=False
 multi=False
 opponent_is_Bot=True
-player1_is_Bot=False
+player1_is_Bot=True
 food_pos=np.random.randint(0,(width*snake_size-snake_size)//snake_size,size=(2,200))*snake_size
 env=snake_env(multiplayer=multi,simple_observation=simple,\
           win_width=snake_size*width,win_height=snake_size*height,special_food_mode=False,\
-          periodic_boundaries_mode=False,no_tail_mode=False,POV_mode=True,starving_mode=True,\
+          periodic_boundaries_mode=True,no_tail_mode=False,POV_mode=True,starving_mode=True,\
           starving_limit=100,starving_only_1=True,zerosum=False,tron_mode=True,\
           collision_with_head=True,give_food_pos=False,food_pos=food_pos,\
           starting_tail=2,starting_tail2=2,allow_180=False)
-playgame(env,w1_1,w2_1,b1_1,b2_1)
+
+
 "Neuro Evolution Options"
-n=5000#population
-num_gen=8
+n=400#population
+num_gen=200
 max_frames=2000
 use_played=False
 
@@ -436,18 +437,28 @@ survive_reward=False
 create_video=False
 
 "Loading existing player"
-#w1_2=np.load("surv100,best34,gen500,w1_best.npy")
-#w2_2=np.load("surv100,best34,gen500,w2_best.npy")
-#b1_2=np.load("surv100,best34,gen500,b1_best.npy")
-#b2_2=np.load("surv100,best34,gen500,b2_best.npy")
+w1_1=np.load("gen400,nocross,01,02,180allow,longtail,solo,400,w1_best.npy")
+w2_1=np.load("gen400,w2_b.npy")
+b1_1=np.load("gen400,b1_b.npy")
+b2_1=np.load("gen400,b2_b.npy")
+
+w1_2=np.load("surv100,best34,gen500,w1_best.npy")
+w2_2=np.load("surv100,best34,gen500,w2_best.npy")
+b1_2=np.load("surv100,best34,gen500,b1_best.npy")
+b2_2=np.load("surv100,best34,gen500,b2_best.npy")
+
 "Loading existing population"
-w1=np.load("gen150,nocross,01,02,180allow,w1.npy")
-w2=np.load("gen150,w2.npy")
-b1=np.load("gen150,b1.npy")
-b2=np.load("gen150,b2.npy")
+#w1=np.load("gen150,nocross,01,02,180allow,w1.npy")
+#w2=np.load("gen150,w2.npy")
+#b1=np.load("gen150,b1.npy")
+#b2=np.load("gen150,b2.npy")
 #playgame(env,w1_1,w2_1,b1_1,b2_1)
+
 "Creating new population"
-#w1,w2,b1,b2=generate(use_played)
+w1,w2,b1,b2=generate(use_played)
+
+"PlayGame"
+playgame(env,w1_1,w2_1,b1_1,b2_1)#inout neural net of player 1
 
 if create_video:
     w1_video=[]
@@ -462,9 +473,9 @@ for k in range(num_gen):
     env=snake_env(multiplayer=multi,simple_observation=simple,\
           win_width=snake_size*width,win_height=snake_size*height,special_food_mode=False,\
           periodic_boundaries_mode=False,no_tail_mode=False,POV_mode=True,starving_mode=True,\
-          starving_limit=100,starving_only_1=True,zerosum=False,tron_mode=True,\
+          starving_limit=120,starving_only_1=True,zerosum=False,tron_mode=True,\
           collision_with_head=True,give_food_pos=True,food_pos=food_pos,\
-          starting_tail=10,starting_tail2=5,allow_180=True)
+          starting_tail=7,starting_tail2=5,allow_180=True)
     rews=life(n,max_frames,multi=multi)
     w1_best[k],w2_best[k],b1_best[k],b2_best[k]=save_best(w1,w2,b1,b2,rews)
     selected= selection(rews)
@@ -511,10 +522,17 @@ for k in range(num_gen):
 #b1=np.load("surviving,n=5000,b1_1.npy")
 #b2=np.load("surviving,n=5000,b2_1.npy")
 
-#np.save("gen150,nocross,01,02,180allow,w1",w1)
-#np.save("gen150,w2",w2)
-#np.save("gen150,b1",b1)
-#np.save("gen150,b2",b2)
+#np.save("gen400,nocross,01,02,180allow,longtail,solo,400,w1",w1)
+#np.save("gen400,w2",w2)
+#np.save("gen400,b1",b1)
+#np.save("gen400,b2",b2)
+#np.save("gen400,nocross,01,02,180allow,longtail,solo,400,w1_best",w1_1)
+#np.save("gen400,w2_b",w2_1)
+#np.save("gen400,b1_b",b1_1)
+#np.save("gen400,b2_b",b2_1)
+
+
+
 
 #string_w1="gen500,n2000,sel3,str0.1,rate0.01,starving100,rews"+str(max(rews))+",w1"
 #string_w2="gen500,n2000,sel3,str0.1,rate0.01,starving100,rews"+str(max(rews))+",w2"
