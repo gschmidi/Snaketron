@@ -333,7 +333,7 @@ def format_obs(obs, simple=True):
 "Adjustables"
 width=10
 height=10
-vel=5
+vel=7
 
 snake_size=20
 initial_games= 40000
@@ -345,31 +345,42 @@ memory_limit=10000
 simple=False
 env=snake_env(multiplayer=False,simple_observation=simple,\
               win_width=snake_size*width,win_height=snake_size*height,\
-              periodic_boundaries_mode=True,no_tail_mode=False)
+              periodic_boundaries_mode=True,no_tail_mode=False,starting_tail=1)
+
+
+"Load Played Game"
+obs=np.load("played10x10_Singleplayer_obs_2.npy")
+ac=np.load("played10x10_Singleplaye_ac_2.npy")
+
+
+"Train"
+#obs,ac=playgame_save(env)
+model=create_model()
+model.fit(obs,ac,epochs=12)
 
 playgame(env)
 
 "Snippets"
+
 #model.summary()
 #obs1=format_obs(obs,simple=False)
 #obs1,ac1,av_rew1=get_training_data(model=model)
 
-#obs,ac=playgame_save(env)
-#model=create_model()
-#model.fit(obs,ac,epochs=15)
+"Combine 2 played games"
 #obs_mix=np.concatenate((obs,obs2))
 #ac_mix=np.concatenate((ac,ac2))
+
 #for i in range(1):
 #    [x,y,av_rew]=get_training_data()
 #    print("len(x)",len(x))
 #    model.fit(x,y, epochs=epochs, batch_size=batch_size)
 #
 
-
+"Get Training Data"
 #initial_games=100
 #threshold=-5
 #[x2,y2,av_rew2]=get_training_data(model)
-#
+
 #print("Gain1",av_rew2-av_rew)
 
 #obs_new=np.delete(obs,-1,0)
@@ -385,8 +396,7 @@ playgame(env)
 #np.save("played10x10_Singleplaye_ac_2.npy",ac)
 #x=x/200
 
-#obs=np.load("played10x10_Singleplayer_obs_2.npy")
-#ac=np.load("played10x10_Singleplaye_ac_2.npy")
+
 #model.summary()
 #test_loss, test_acc = model.evaluate(x, y2)
 #print('Test accuracy:', test_acc)
